@@ -2,7 +2,7 @@ export default {
   // 网站标题
   Title: '雷博客',
   // 网站地址
-  Site: ' ',
+  Site: 'https://avhastro-theme.pages.dev',
   // 网站副标题
   Subtitle: '寻寻觅觅.',
   // 网站描述
