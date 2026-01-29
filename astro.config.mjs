@@ -26,12 +26,18 @@ export default defineConfig({
 		smoothScrolling: true,
         progress: false, // ❌ 改为 false，进度条就彻底消失了
 		cache: true,
-		preload: true,
+		preload: false, // 关掉悬停预下载
 		accessibility: true,
 		updateHead: true,
 		updateBodyClass: false,
 		globalInstance: true
 	}),
+				   
+	prefetch: {
+		prefetchAll: true,    // 用 Astro 官方的 prefetch 策略
+		defaultStrategy: 'hover' // 或者用 'tap'，只有在移动端触摸或点击时才触发
+	},
+				   
 	Compress({ Image: false, Action: { Passed: async () => true } }),
 	sitemap({
 		// 处理末尾带 / 的 url
