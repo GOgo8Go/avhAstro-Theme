@@ -1,0 +1,104 @@
+---
+title: 测试
+date: 2026-01-01
+categories: Code
+tags:
+  - 测试
+  - Astro
+
+id: ceshiyemian
+cover: https://astro.build/_astro/blog-post-2025-in-review.Bp3TKTi__Z17yjNW.webp?dpl=697a458b1ab6050008d07a7f
+recommend: true
+---
+
+![测试](https://astro.build/_astro/blog-post-2025-in-review.Bp3TKTi__Z17yjNW.webp?dpl=697a458b1ab6050008d07a7f)
+
+这说明虽然“进度条”这个遮羞布被撕掉了，但底层的问题（加载慢）彻底暴露出来了。5秒钟的延迟对于一个 Astro 静态网站来说是极其不正常的。
+
+这里有三个致命原因导致了你现在的“卡顿”和“图片消失”：
+
+1. 图片不显示：Swup 的“后遗症”
+
+你的模板之前针对 Swup 做了大量的“局部刷新”适配。
+
+原因： Swup 之前只替换 .main-inner-content 里的内容。现在你用了官方 ClientRouter，它会尝试同步整个页面的状态。
+
+图片消失的元凶： 检查你的图片是否使用了 loading="lazy" 或者某些 Lazyload 脚本。很多老模板的图片懒加载脚本是绑定在 window.onload 上的。
+
+在 ClientRouter 切换时，页面并不会触发传统的 onload 事件。
+
+解决方法： 在你的图片标签里暂时去掉懒加载类名，或者给脚本添加 astro:page-load 监听。
+
+2. 为什么加载要 5 秒？（关键排查）
+
+5 秒钟通常不是因为 HTML 文本慢，而是资源阻塞。
+
+排查 A：外部资源加载失败
+
+你之前集成了 remarkMath 和 rehypeKatex。如果你的页面里有数学公式，Astro 可能会去远程拉取几百 KB 的字体文件（如 KaTeX 字体）。如果这些字体加载慢，浏览器会卡住渲染。
+
+排查 B：Cloudflare 的“冷启动”或构建问题
+
+如果你是在开发环境下（localhost），检查终端是否有报错；如果是线上，按 F12 查看 Network（网络） 面板。
+
+看看那个耗时 5 秒的请求到底是在等什么？（是 document 还是某个 js 文件？）
+
+3. 为什么不“丝滑”？
+
+你觉得不丝滑，是因为 ClientRouter 虽然在跑，但由于 reset.less 那个 0.01ms 的限制，导致它没有过渡动画。
+
+结果就是：你点了链接 -> 页面没反应（后台在下载） -> 5 秒后突然像闪电一样跳到了新页面。
+
+这种“零反馈”的等待会让体感时间成倍增加。
+
+快速修复方案
+
+为了让它重新“丝滑”并找回图片，请尝试以下操作：
+
+第一步：强行缩短等待感（修改 Layout.astro）
+
+给你的 ClientRouter 增加一个“指令”，并确保动画时间正常。
+
+在 <head> 中：
+
+HTML
+
+<ClientRouter fallback="animate" />
+
+
+并在全局 CSS 中加入这个（覆盖 reset.less）：
+
+CSS
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 400ms !important; /* 强制给一个感知的过渡时间 */
+}
+
+
+第二步：图片显形
+
+检查你的 Markdown 或者组件里的图片。如果原来有类似 class="lazyload" 之类的东西，先暂时改成原生的：
+
+HTML
+
+<img src="你的远程WebP" width="800" height="400" />
+
+
+不要依赖任何第三方懒加载库，因为它们大多不兼容 Astro 的原生路由。
+
+第三步：检查 Prefetch 是否生效
+
+如果你在 astro.config.mjs 里开了 prefetch，当你鼠标移到链接上时，F12 的网络面板应该立刻出现一个新请求。
+
+如果没有出现，说明你的配置没起作用。
+
+如果出现了，但请求很慢，说明是你的**服务器（Cloudflare 节点）**响应太慢。
+
+总结建议
+
+5 秒钟的延迟通常意味着某个 JS 脚本死锁了或者 CSS 还在等待超时的资源。
+
+你可以尝试：暂时把 reset.less 的引入注释掉，然后再切换页面看看。如果速度变快了，那就说明是重置样式里的某个设置让浏览器陷入了长时间的计算。
+
+你可以按 F12 看看 Console（控制台）里有没有红色的报错？如果有报错，请发给我，那是解决图片不显示的关键。
