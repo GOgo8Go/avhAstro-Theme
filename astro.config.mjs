@@ -19,6 +19,10 @@ import swup from '@swup/astro';
 export default defineConfig({
 	site: SITE_INFO.Site,
 	build: { assets: 'vh_static' },
+	prefetch: {
+		prefetchAll: true,    // 用 Astro 官方的 prefetch 策略
+		defaultStrategy: 'hover' // 或者用 'tap'，只有在移动端触摸或点击时才触发
+	},
 	integrations: [swup({
 		theme: false,
 		animationClass: "vh-animation-",
@@ -31,13 +35,7 @@ export default defineConfig({
 		updateHead: true,
 		updateBodyClass: false,
 		globalInstance: true
-	}),
-				   
-	prefetch: {
-		prefetchAll: true,    // 用 Astro 官方的 prefetch 策略
-		defaultStrategy: 'hover' // 或者用 'tap'，只有在移动端触摸或点击时才触发
-	},
-				   
+	}),		   
 	Compress({ Image: false, Action: { Passed: async () => true } }),
 	sitemap({
 		// 处理末尾带 / 的 url
