@@ -26,7 +26,15 @@ export default defineConfig({
 		smoothScrolling: true,
         progress: true,  
 		cache: true,
-		preload: false, // 关掉悬停预下载
+
+		preload: {
+	      hover: true,           // 保留 hover 预载（大多数人想要的）
+	      hover: {               // ← 推荐加这个对象写法
+	       delay: 120,          // 建议 80~200ms，根据你鼠标移动速度调
+	          // throttle: 100     // 部分版本支持（新版 preload 插件可能有）
+	      },
+	        // visible: true,      // 视口内自动预载（可选，关掉可进一步省流量）
+	    },
 		accessibility: true,
 		updateHead: true,
 		updateBodyClass: false,
