@@ -113,31 +113,24 @@ import "./Aside.less";
 	}
 
 	<!-- 流量卡 -->
-	{
-		(
-			<section class="vh-aside-item adcard">
-				<h3>精品流量卡</h3>
-				<a class="vh-aside-adcard" href="https://h5.lot-ml.com/ProductEn/Index/548465d7349b6599" target="_blank" rel="noopener noreferrer">
-					<img src="/assets/images/phone-card.webp" alt="精品大流量卡" />
-				</a>
-			</section>
-		)
-	}
+	// 
 
 	<section class="sticky-aside">
 		<!-- 最新文章块 -->
 		{
-			recommendArticles.length && AsideShow.recommendArticleShow && (
+			recommendArticles.length && (
 				<section class="vh-aside-item articles">
 					<h3>推荐文章</h3>
 					<div class="vh-aside-articles">
-						{recommendArticles.map((i, idx) => (
-							<a href={`/article/${i.id}`}>
-								<span>
-									{idx < 3 ? <i>{idx + 1}</i> : <em>{idx + 1}.</em>}
-									<cite class="vh-ellipsis">{i.title}</cite>
-								</span>
-								<time>{fmtTime(i.date, "YYYY-MM-DD ")}</time>
+						{recommendArticles.map(async i => (
+							<a href={`/article/${(await i).id}`}>
+								<p class="cover">
+									<Image src="/assets/images/lazy-loading.webp" data-vh-lz-src={(await i).cover} alt={(await i).title} width="1" height="1" />
+								</p>
+								<p class="info">
+									<span>{(await i).title}</span>
+									<time>{fmtTime((await i).date, "YYYY-MM-DD")}</time>
+								</p>
 							</a>
 						))}
 					</div>
