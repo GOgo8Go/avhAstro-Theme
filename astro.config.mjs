@@ -14,23 +14,22 @@ import remarkDirective from "remark-directive";
 import { remarkNote, addClassNames } from './src/plugins/markdown.custom'
 // Markdown 配置================
 import SITE_INFO from './src/config';
-import swup from '@swup/astro';
+// 1. 删除 import swup from '@swup/astro';
 // https://astro.build/config
 export default defineConfig({
 	site: SITE_INFO.Site,
 	build: { assets: 'vh_static' },
-	integrations: [swup({
-		theme: false,
-		animationClass: "vh-animation-",
-		containers: [".main-inner>.main-inner-content", '.vh-header>.main'],
-		smoothScrolling: true,
-		progress: true,
-		cache: true,
-		preload: true,
-		accessibility: true,
-		updateHead: true,
-		updateBodyClass: false,
-		globalInstance: true
+	prefetch: {
+        prefetchAll: true, // 开启全局预加载，让切换达到“瞬移”效果
+        defaultStrategy: 'hover' // 鼠标悬停在链接上时就开始加载
+    },
+	integrations: [
+	        // ❌ 这里原本的 swup({...}) 整个删掉
+	        // ✅ 保留其他的插件，比如：
+	        // icon(), 
+	        // sitemap(),
+	        // tailwind(),
+	    ], // 注意保留这个方括号和逗号
 	}),
 	Compress({ Image: false, Action: { Passed: async () => true } }),
 	sitemap({
