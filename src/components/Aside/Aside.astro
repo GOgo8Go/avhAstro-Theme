@@ -125,7 +125,7 @@ import "./Aside.less";
 						{recommendArticles.map(async i => (
 							<a href={`/article/${(await i).id}`}>
 								<p class="cover">
-									<Image src="/assets/images/lazy-loading.webp" data-vh-lz-src={(await i).cover} alt={(await i).title} width="1" height="1" />
+									<img src="/assets/images/lazy-loading.webp" data-vh-lz-src={(await i).cover} alt={(await i).title} width="1" height="1" />
 								</p>
 								<p class="info">
 									<span>{(await i).title}</span>
