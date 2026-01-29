@@ -19,16 +19,12 @@ import swup from '@swup/astro';
 export default defineConfig({
 	site: SITE_INFO.Site,
 	build: { assets: 'vh_static' },
-	prefetch: {
-		prefetchAll: true,    // 用 Astro 官方的 prefetch 策略
-		defaultStrategy: 'hover' // 或者用 'tap'，只有在移动端触摸或点击时才触发
-	},
 	integrations: [swup({
 		theme: false,
 		animationClass: "vh-animation-",
 		containers: [".main-inner>.main-inner-content", '.vh-header>.main'],
 		smoothScrolling: true,
-        progress: false, // ❌ 改为 false，进度条就彻底消失了
+        progress: true,  
 		cache: true,
 		preload: false, // 关掉悬停预下载
 		accessibility: true,
