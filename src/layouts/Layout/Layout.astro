@@ -43,8 +43,8 @@ import "./Layout.less";
 		    if (target.tagName !== 'IMG' || target.dataset.errorHandled) return;
 		    target.dataset.errorHandled = "true";
 		
-		    // --- 方案 A：卡片封面区 (根据你提供的 HTML 结构修正) ---
-		    // 检查图片自己是否有那个类，或者它的父级 section 是否是 vh-article-banner
+		    // --- 方案 A：卡片封面区 ---
+		    // 逻辑：如果是封面图，随机展示一张本地默认图
 		    const isBanner = target.classList.contains('vh-article-banner') || 
 		                     target.closest('.vh-article-banner') || 
 		                     target.closest('.post-card');
@@ -59,22 +59,21 @@ import "./Layout.less";
 		      return; 
 		    }
 		
-		    // --- 方案 B：文章插图 (换成内联 SVG) ---
-		    // 这个 SVG 已经打包了背景、虚线、照相机和破碎线，且不会污染 CSS
-		    const svgPlaceholder = `data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjQ1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZmFmYWZhIi8+PHJlY3QgeD0iNSIgeT0iNSIgd2lkdGg9Ijc5MCIgaGVpZ2h0PSI0NDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2VjZWNlYyIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtZGFzaGFycmF5PSI4LDQiLz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg0MDAgMjI1KSI+PHRleHQgeT0iMTAiIGZvbnQtc2l6ZT0iNDgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIG9wYWNpdHk9IjAuNSI+8J+UpzwvdGV4dD48bGluZSB4MT0iLTMwIiB5MT0iLTIwIiB4Mj0iMzAiIHkyPSIyMCIgc3Ryb2tlPSIjZmFmYWZhIiBzdHJva2Utd2lkdGg9IjYiLz48bGluZSB4MT0iLTMwIiB5MT0iLTIwIiB4Mj0iMzAiIHkyPSIyMCIgc3Ryb2tlPSIjZGNkY2RjIiBzdHJva2Utd2lkdGg9IjIiLz48dGV4dCB5PSI0NSIgZm9udC1zaXplPSIxMCIgZmlsbD0iI2NjYyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIHN0eWxlPSJsZXR0ZXItc3BhY2luZzoycHgiPklNQUdFIExPQUQgRVJST1I8L3RleHQ+PC9nPjwvc3ZnPg==`;
+		    // --- 方案 B：文章插图 (改为使用你上传的 broken_image.svg) ---
+		    // 直接指向你上传到 Astro public 目录下的路径
+		    target.src = "/assets/images/broken_image.svg";
 		
-		    target.src = svgPlaceholder;
-		    
 		    // 直接操作行内样式，确保只影响当前损坏的图片
 		    Object.assign(target.style, {
-		      width: '280px',
+		      width: '280px',            // 调整为你需要的占位图宽度
 		      maxWidth: '100%',
 		      aspectRatio: '16 / 9',
-		      margin: '1.5rem auto',
+		      margin: '0 auto',
 		      display: 'block',
 		      borderRadius: '8px',
-		      objectFit: 'cover',
-		      backgroundImage: 'none' // 清除可能存在的背景干扰
+		      objectFit: 'contain',      // 改为 contain，防止破碎图标被拉伸变形
+		      backgroundColor: '#f5f5f5', // 给一个浅色背景，让图标更明显
+		      backgroundImage: 'none'
 		    });
 		  }, true);
 		</script>
