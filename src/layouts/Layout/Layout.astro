@@ -43,64 +43,32 @@ import "./Layout.less";
 		  if (target.tagName !== 'IMG' || target.dataset.errorHandled) return;
 		  target.dataset.errorHandled = "true";
 		
-		  // 判断是否在文章正文区（你的结构：article > main）
-		  const isArticleImage = target.closest('article main') || target.closest('article');  // 双保险，覆盖 article 内所有 img
-		
-		  // 判断是否是卡片/封面/头像等特殊区（这些走随机图，不走 SVG）
-		  const isBannerOrSpecial = 
+		  // 只判断是否是卡片封面、banner 或 avatar 区域
+		  const isSpecialArea = 
 		    target.classList.contains('vh-article-banner') ||
 		    target.closest('.vh-article-banner') ||
 		    target.closest('.post-card') ||
-		    target.closest('.avatar');  // 如果有其他不想 SVG 的区，继续加 ||
+		    target.closest('.avatar');
 		
-		  // 如果是文章内图片，且不是特殊区 → 替换成 SVG
-		  if (isArticleImage && !isBannerOrSpecial) {
-		    target.src = "/assets/images/broken_image.svg";
+		  // 只有这些区域才替换成随机图
+		  if (isSpecialArea) {
+		    const randomId = Math.floor(Math.random() * 10) + 1;
+		    target.src = `/assets/images/random/default-${randomId}.webp`;
+		    target.style.padding = '0';
+		    target.style.objectFit = 'cover';
 		
-		    // 强制样式，防止库改动导致变小/隐藏
-		    Object.assign(target.style, {
-		      width: '280px',
-		      maxWidth: '100%',
-		      height: 'auto',              // 改成 auto，避免固定高塌陷
-		      minHeight: '180px',          // 保底高度
-		      aspectRatio: '16 / 9',
-		      margin: '0 auto',
-		      display: 'block !important',
-		      borderRadius: '8px',
-		      objectFit: 'contain',
-		      padding: '80px',             // 如果图标太大可调 100px+
-		      boxSizing: 'border-box',
-		      backgroundColor: '#f5f5f5',
-		      backgroundImage: 'none',
-		      visibility: 'visible !important',
-		      opacity: '1 !important'
-		    });
+		    // 豁免模糊（如果 Base.less 还有模糊规则）
+		    target.classList.add('img-error');  // 或 'loaded'，根据你的豁免逻辑
 		
-		    // 关键：欺骗 lazyload 库，认为已成功加载，别再动它
-		    target.classList.add('loaded', 'img-error');         // 加 loaded 让模糊豁免 + 告诉库成功
-		    target.classList.remove('error', 'entered', 'lazyload', 'loading');  // 移除库的 error/处理中类
-		    target.removeAttribute('data-ll-status');            // 移除状态，防止库重置
-		
-		    // 防止无限 onerror 循环
-		    target.onerror = null;
-		
-		    return;  // 结束，不走下面随机逻辑
+		    target.onerror = () => {
+		      target.src = `/assets/images/random/default-1.webp`;
+		      target.classList.add('img-error');
+		      target.onerror = null;
+		    };
 		  }
 		
-		  // 其他情况（卡片、头像等）→ 随机 fallback 图
-		  const randomId = Math.floor(Math.random() * 10) + 1;
-		  target.src = `/assets/images/random/default-${randomId}.webp`;
-		  target.style.padding = '0';
-		  target.style.objectFit = 'cover';
-		
-		  // 豁免模糊
-		  target.classList.add('img-error');  // 或 'loaded'，看你 Base.less 怎么豁免
-		
-		  target.onerror = () => {
-		    target.src = `/assets/images/random/default-1.webp`;
-		    target.classList.add('img-error');
-		    target.onerror = null;
-		  };
+		  // 文章里的图片或其他地方：什么都不做，让浏览器/lazyload 默认处理
+		  // （可能显示破碎图标、问号，或保持模糊，根据你的库设置）
 		
 		}, true);
 		</script>
