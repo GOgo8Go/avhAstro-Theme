@@ -3,6 +3,6 @@ import SITE_INFO from '@/config'
 import { LoadScript } from "@/utils/index";
 declare const SmoothScroll: any;
 export default async () => {
-  await LoadScript("/assets/js/smoothscroll.min.js");
-  SmoothScroll({ stepSize: 118, animationTime: SITE_INFO.ScrollSpeed })
+  // await LoadScript("/assets/js/smoothscroll.min.js");
+  // SmoothScroll({ stepSize: 118, animationTime: SITE_INFO.ScrollSpeed })
 };
