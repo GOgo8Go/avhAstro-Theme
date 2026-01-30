@@ -139,7 +139,7 @@ img {
 img[data-vh-lz-src] {
 	transition: all 0.18s ease-in;
 
-	&:not(.loaded) {
+	&:not(.loaded):not(.img-error) {
 		filter: blur(0.88rem) brightness(1);
 	}
 }
@@ -219,7 +219,7 @@ img[data-vh-lz-src] {
 	img[data-vh-lz-src] {
 		transition: all 0.18s ease-in;
 
-		&:not(.loaded) {
+		&:not(.loaded):not(.img-error) {
 			/* 降低模糊强度，减少 GPU 计算量  将模糊半径减小。0.88rem 的模糊太重了，其实 4px 就足够好看且省资源。*/
 			filter: blur(4px) brightness(1);
 		}
