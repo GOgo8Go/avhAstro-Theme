@@ -214,17 +214,25 @@ img[data-vh-lz-src] {
 }
 
 // 设置图片懒加载样式
-.main-inner>.main-inner-content,
+.main-inner > .main-inner-content,
 .avatar {
-	img[data-vh-lz-src] {
-		transition: all 0.18s ease-in;
+  img[data-vh-lz-src] {
+    transition: all 0.18s ease-in;
 
-		&:not(.loaded):not(.img-error) {
-			/* 降低模糊强度，减少 GPU 计算量  将模糊半径减小。0.88rem 的模糊太重了，其实 4px 就足够好看且省资源。*/
-			filter: blur(4px) brightness(1);
-		}
-	}
+    &:not(.loaded):not(.img-error) {
+      /* 正常懒加载时的模糊 */
+      filter: blur(4px) brightness(1);
+    }
+
+    /* 新增：豁免已替换为 fallback 的图片（随机图或 broken SVG） */
+    &[src*="default-"],
+    &[src$="broken_image.svg"] {
+      filter: none !important;  // 强制去除模糊
+      opacity: 1 !important;    // 如果有其他淡入效果也可豁免
+    }
+  }
 }
+
 
 // 首次加载效果   当页面开始离开（is-leaving）时，不要位移动画，直接消失
 .vh-animation.vh-animation-init {
