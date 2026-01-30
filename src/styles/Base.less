@@ -206,17 +206,17 @@ img[data-vh-lz-src] {
 		transition: all 0.18s ease-in;
 
 		&:not(.loaded) {
-			filter: blur(0.88rem) brightness(1);
+			/* 降低模糊强度，减少 GPU 计算量  将模糊半径减小。0.88rem 的模糊太重了，其实 4px 就足够好看且省资源。*/
+			filter: blur(4px) brightness(1);
 		}
 	}
 }
 
-// 首次加载效果
-.vh-animation.vh-animation-init {
+// 首次加载效果   当页面开始离开（is-leaving）时，不要位移动画，直接消失
+html.is-leaving .vh-animation.vh-animation-init {
 	opacity: 0;
-	animation: 300ms vh-init-show;
-	animation-fill-mode: forwards;
-	transition: opacity 0.18s ease-in-out, transform 0.18s ease-in-out;
+	transform: none !important;
+    transition: opacity 0.1s ease-in !important;
 }
 
 // swup 动画效果
@@ -234,8 +234,11 @@ html.is-changing {
 html.is-animating {
 	.vh-animation {
 		&.vh-animation-init {
-			transform: translateY(0.88rem);
-			opacity: 0;
+			/* 将位移从 0.88rem 改为 0.2rem，或者干脆删掉这一行 */
+            // transform: translateY(0.2rem); 
+            opacity: 0;
+            /* 强制缩短切换时的过渡时间 */
+            transition: opacity 0.1s ease-out, transform 0.1s ease-out;
 		}
 	}
 }
