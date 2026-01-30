@@ -59,7 +59,21 @@
 	// ::-webkit-scrollbar {
 	//	display: block;
 	//}
+	
+	// --- 修改滚动条部分 ---
+	// Firefox 设置
+	scrollbar-width: auto; // 从 none 改为 auto，恢复宽度
+	scrollbar-color: rgba(0, 0, 0, 0.25) transparent; 
 }
+	
+// --- 针对 Webkit 内核 (Edge, Chrome, Safari) ---
+// 注意：Less 中可以直接写嵌套或者并列
+::-webkit-scrollbar {
+	width: 10px;        // 宽度增加到 10px
+	height: 10px;       // 横向滚动条高度
+	display: block;     // 确保显示
+}
+ 
 
 // 设置文本选中颜色
 ::selection,
