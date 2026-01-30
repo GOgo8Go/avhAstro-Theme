@@ -23,7 +23,7 @@ export default defineConfig({
 		theme: false,
 		animationClass: "vh-animation-",
 		containers: [".main-inner>.main-inner-content", '.vh-header>.main'],
-		// smoothScrolling: true,       已经在 CSS 里实现了原生的，JS 的平滑滚动只会浪费性能）。
+		smoothScrolling: false, // 显式禁用，不让 JS 模拟滚动
 		animateHistoryBrowsing: true,    // 让前进后退也带动画
         progress: true,  
 		cache: true,
