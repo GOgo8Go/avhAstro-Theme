@@ -213,10 +213,11 @@ img[data-vh-lz-src] {
 }
 
 // 首次加载效果   当页面开始离开（is-leaving）时，不要位移动画，直接消失
-html.is-leaving .vh-animation.vh-animation-init {
+.vh-animation.vh-animation-init {
 	opacity: 0;
-	transform: none !important;
+	// transform: none !important;
     transition: opacity 0.1s ease-in !important;
+	animation: 150ms vh-init-show forwards; /* 时间减半，既有过渡又不拖词 */
 }
 
 // swup 动画效果
@@ -319,7 +320,7 @@ html.is-animating {
 
 @keyframes vh-init-show {
 	0% {
-		transform: translateY(2rem);
+		transform: translateY(5px);
 		opacity: 0;
 	}
 
