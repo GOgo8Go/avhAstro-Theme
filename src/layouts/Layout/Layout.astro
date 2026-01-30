@@ -72,6 +72,9 @@ import "./Layout.less";
 		      display: 'block',
 		      borderRadius: '8px',
 		      objectFit: 'contain',      // 改为 contain，防止破碎图标被拉伸变形
+			  padding: '40px',      // 数值越大，中间的图标就越小
+			  boxSizing: 'border-box' // 确保 padding 不撑大整体宽高
+
 		      backgroundColor: '#f5f5f5', // 给一个浅色背景，让图标更明显
 		      backgroundImage: 'none'
 		    });
