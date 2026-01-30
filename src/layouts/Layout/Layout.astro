@@ -35,6 +35,37 @@ import { ClientRouter } from 'astro:transitions';
 		{ad_Client && (asideAD_Slot || articleAD_Slot) && <script is:inline async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ad_Client}`} crossorigin="anonymous" />}
 		<!-- 彩旗🎈 -->
 		<script is:inline src="/assets/js/vhCaiqi.js" defer></script>
+
+		<!-- 卡片和文章图片处理 -->
+		<script is:inline>
+          // 使用捕获模式监听全局错误
+          document.addEventListener('error', function (e) {
+            const target = e.target;
+            if (target.tagName !== 'IMG' || target.dataset.errorHandled) return;
+            target.dataset.errorHandled = "true";
+
+            // 场景 A：文章内容区的图 -> 变成 CSS 破碎框
+            if (target.closest('.main-inner-content')) {
+              const placeholder = document.createElement('div');
+              placeholder.className = 'img-error'; 
+              target.parentNode.insertBefore(placeholder, target);
+              target.remove();
+              return;
+            }
+
+            // 场景 B：卡片封面图 -> 换随机图
+            if (target.classList.contains('vh-card-cover') || target.closest('.post-card')) {
+              // 随机撞运气（1-10），撞不到就回退到 default-1.webp
+              const randomId = Math.floor(Math.random() * 10) + 1;
+              target.src = `/assets/images/random/default-${randomId}.webp`;
+              target.onerror = () => {
+                target.src = `/assets/images/random/default-1.webp`;
+                target.onerror = null;
+              };
+            }
+          }, true);
+        </script>
+
 		<!-- 设置主题颜色 -->
 		<Fragment
 			set:html={`<style>:root {${Object.entries(Theme)
