@@ -25,7 +25,7 @@ export default defineConfig({
 		containers: [".main-inner>.main-inner-content", '.vh-header>.main'],
 		smoothScrolling: false, // 显式禁用，不让 JS 模拟滚动
 		animateHistoryBrowsing: true,    // 让前进后退也带动画
-        progress: true,  
+        progress: false,  
 		cache: true,
 
 		preload: {
