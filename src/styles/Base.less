@@ -423,48 +423,4 @@ html.is-animating {
 }
 
 
-// 极致极简的 CSS “破碎占位卡片”
-.img-error {
-  display: block;
-  position: relative;
-  width: 280px;            /* 限制失败后的宽度，不占满全屏 */
-  aspect-ratio: 16 / 9;    /* 锁定专业比例 */
-  margin: 1rem auto;
-  border-radius: 6px;
-  background-color: #fafafa; /* 极浅背景 */
-  
-  // 1. 用渐变画一个极细的虚线边框效果（比 border 更精致）
-  background-image: linear-gradient(90deg, #eee 50%, transparent 50%), 
-                    linear-gradient(90deg, #eee 50%, transparent 50%), 
-                    linear-gradient(0deg, #eee 50%, transparent 50%), 
-                    linear-gradient(0deg, #eee 50%, transparent 50%);
-  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
-  background-size: 8px 1px, 8px 1px, 1px 8px, 1px 8px;
-  background-position: 0 0, 0 100%, 0 0, 100% 0;
-
-  // 2. 利用伪元素画中心图标
-  &::before {
-    content: "\1F4F7";   /* 刚才选定的照相机，或者 \1F5BC 画框 */
-    position: absolute;
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 24px;
-    color: #ddd;         /* 颜色调淡，感官减弱 */
-    filter: grayscale(1); 
-    opacity: 0.5;
-  }
-
-  // 3. 增加一条细微的“破碎斜线”感
-  &::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 40px;
-    height: 1px;
-    background: #eee;
-    transform: translate(-50%, -50%) rotate(-45deg);
-    z-index: 1;
-  }
-}
+ 
