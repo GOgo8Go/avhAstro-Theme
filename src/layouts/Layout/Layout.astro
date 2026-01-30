@@ -25,7 +25,7 @@ import "@/styles/Base.less";
 // Layout 样式
 import "./Layout.less";
 // Layout.astro
-import { ClientRouter } from 'astro:transitions';
+ 
 
 ---
 
@@ -38,33 +38,39 @@ import { ClientRouter } from 'astro:transitions';
 
 		<!-- 卡片和文章图片处理 -->
 		<script is:inline>
-          // 使用捕获模式监听全局错误
-          document.addEventListener('error', function (e) {
-            const target = e.target;
-            if (target.tagName !== 'IMG' || target.dataset.errorHandled) return;
-            target.dataset.errorHandled = "true";
-
-            // 场景 A：文章内容区的图 -> 变成 CSS 破碎框
-            if (target.closest('.main-inner-content')) {
-              const placeholder = document.createElement('div');
-              placeholder.className = 'img-error'; 
-              target.parentNode.insertBefore(placeholder, target);
-              target.remove();
-              return;
-            }
-
-            // 场景 B：卡片封面图 -> 换随机图
-            if (target.classList.contains('vh-card-cover') || target.closest('.post-card')) {
-              // 随机撞运气（1-10），撞不到就回退到 default-1.webp
-              const randomId = Math.floor(Math.random() * 10) + 1;
-              target.src = `/assets/images/random/default-${randomId}.webp`;
-              target.onerror = () => {
-                target.src = `/assets/images/random/default-1.webp`;
-                target.onerror = null;
-              };
-            }
-          }, true);
-        </script>
+		  document.addEventListener('error', function (e) {
+		    const target = e.target;
+		    if (target.tagName !== 'IMG' || target.dataset.errorHandled) return;
+		    target.dataset.errorHandled = "true";
+		
+		    // 优先处理卡片区/封面图 (vh-article-banner 或在 .post-card 里)
+		    if (target.classList.contains('vh-article-banner') || target.closest('.post-card')) {
+		      const randomId = Math.floor(Math.random() * 10) + 1;
+		      target.src = `/assets/images/random/default-${randomId}.webp`;
+		      target.onerror = () => {
+		        target.src = `/assets/images/random/default-1.webp`;
+		        target.onerror = null;
+		      };
+		      // 成功换图后，确保它显示出来
+		      target.onload = () => target.style.display = 'block';
+		      return; 
+		    }
+		
+		    // 处理文章内插图 (main-inner-content)
+		    if (target.closest('.main-inner-content')) {
+		      const placeholder = document.createElement('div');
+		      placeholder.className = 'img-error'; 
+		      // 插入破碎提示文案，这能撑开一点空间，让效果和 HTML 演示时一致
+		      const text = document.createElement('span');
+		      text.className = 'error-text';
+		      text.innerText = 'Image Load Error';
+		      placeholder.appendChild(text);
+		
+		      target.parentNode.insertBefore(placeholder, target);
+		      target.remove();
+		    }
+		  }, true);
+		</script>
 
 		<!-- 设置主题颜色 -->
 		<Fragment
@@ -72,7 +78,7 @@ import { ClientRouter } from 'astro:transitions';
 				.map(([key, value]) => `${key}:${value};`)
 				.join("")}--vh-main-header-height:${Home ? HomeBanner.HomeHeight : HomeBanner.PageHeight};--vh-home-banner:${HomeBanner.background}}</style>`}
 		/>
-		<ClientRouter />
+ 
 	</Head>
 	<body>
 		<MobileSidebar />
