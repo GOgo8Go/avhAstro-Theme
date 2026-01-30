@@ -43,32 +43,39 @@ import "./Layout.less";
 		    if (target.tagName !== 'IMG' || target.dataset.errorHandled) return;
 		    target.dataset.errorHandled = "true";
 		
-		    // 优先处理卡片区/封面图 (vh-article-banner 或在 .post-card 里)
-		    if (target.classList.contains('vh-article-banner') || target.closest('.post-card')) {
+		    // --- 方案 A：卡片封面区 (根据你提供的 HTML 结构修正) ---
+		    // 检查图片自己是否有那个类，或者它的父级 section 是否是 vh-article-banner
+		    const isBanner = target.classList.contains('vh-article-banner') || 
+		                     target.closest('.vh-article-banner') || 
+		                     target.closest('.post-card');
+		
+		    if (isBanner) {
 		      const randomId = Math.floor(Math.random() * 10) + 1;
 		      target.src = `/assets/images/random/default-${randomId}.webp`;
 		      target.onerror = () => {
 		        target.src = `/assets/images/random/default-1.webp`;
 		        target.onerror = null;
 		      };
-		      // 成功换图后，确保它显示出来
-		      target.onload = () => target.style.display = 'block';
 		      return; 
 		    }
 		
-		    // 处理文章内插图 (main-inner-content)
-		    if (target.closest('.main-inner-content')) {
-		      const placeholder = document.createElement('div');
-		      placeholder.className = 'img-error'; 
-		      // 插入破碎提示文案，这能撑开一点空间，让效果和 HTML 演示时一致
-		      const text = document.createElement('span');
-		      text.className = 'error-text';
-		      text.innerText = 'Image Load Error';
-		      placeholder.appendChild(text);
+		    // --- 方案 B：文章插图 (换成内联 SVG) ---
+		    // 这个 SVG 已经打包了背景、虚线、照相机和破碎线，且不会污染 CSS
+		    const svgPlaceholder = `data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjQ1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZmFmYWZhIi8+PHJlY3QgeD0iNSIgeT0iNSIgd2lkdGg9Ijc5MCIgaGVpZ2h0PSI0NDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2VjZWNlYyIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtZGFzaGFycmF5PSI4LDQiLz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg0MDAgMjI1KSI+PHRleHQgeT0iMTAiIGZvbnQtc2l6ZT0iNDgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIG9wYWNpdHk9IjAuNSI+8J+UpzwvdGV4dD48bGluZSB4MT0iLTMwIiB5MT0iLTIwIiB4Mj0iMzAiIHkyPSIyMCIgc3Ryb2tlPSIjZmFmYWZhIiBzdHJva2Utd2lkdGg9IjYiLz48bGluZSB4MT0iLTMwIiB5MT0iLTIwIiB4Mj0iMzAiIHkyPSIyMCIgc3Ryb2tlPSIjZGNkY2RjIiBzdHJva2Utd2lkdGg9IjIiLz48dGV4dCB5PSI0NSIgZm9udC1zaXplPSIxMCIgZmlsbD0iI2NjYyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIHN0eWxlPSJsZXR0ZXItc3BhY2luZzoycHgiPklNQUdFIExPQUQgRVJST1I8L3RleHQ+PC9nPjwvc3ZnPg==`;
 		
-		      target.parentNode.insertBefore(placeholder, target);
-		      target.remove();
-		    }
+		    target.src = svgPlaceholder;
+		    
+		    // 直接操作行内样式，确保只影响当前损坏的图片
+		    Object.assign(target.style, {
+		      width: '280px',
+		      maxWidth: '100%',
+		      aspectRatio: '16 / 9',
+		      margin: '1.5rem auto',
+		      display: 'block',
+		      borderRadius: '8px',
+		      objectFit: 'cover',
+		      backgroundImage: 'none' // 清除可能存在的背景干扰
+		    });
 		  }, true);
 		</script>
 
