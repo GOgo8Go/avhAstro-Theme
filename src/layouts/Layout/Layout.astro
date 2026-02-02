@@ -84,8 +84,8 @@ import { ClientRouter } from 'astro:transitions';
 
 	</Head>
 	<body>
-		<MobileSidebar />
-		<Header activeNav={activeNav} />
+		<MobileSidebar transition:persist />
+		<Header activeNav={activeNav} transition:persist />
 		<main class="main">
 			{HomeBanner.enable && <MainHeader />}
 			<section class="main-inner" style={`padding-top:${HomeBanner.enable ? "0.88rem" : "calc(66px + 0.68rem)"}`}>
@@ -94,9 +94,9 @@ import { ClientRouter } from 'astro:transitions';
 				</section>
 				<Aside />
 			</section>
-			<BackTop />
+			<BackTop transition:persist />
 		</main>
-		<Footer />
+		<Footer transition:persist />
 		<script>
 			import InitFn from "@/scripts/Init";
 			
