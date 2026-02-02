@@ -122,5 +122,43 @@ import { ClientRouter } from 'astro:transitions';
 		        }
 		    });
 		</script>
+
+
+        // 增加显示动画
+		<div id="click-feedback" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(255,255,255,0.6); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; z-index:999999; opacity:0; pointer-events:none; transition:opacity 0.2s;">
+	    <div class="loading-icon" style="width:40px; height:40px; border-radius:50%; background:var(--vh-main-color, #409eff); animation: pulse 0.8s infinite ease-in-out;"></div>
+		</div>
+	
+	<style is:global>
+	    @keyframes pulse {
+	        0% { transform: scale(0.8); opacity: 0.5; }
+	        50% { transform: scale(1.2); opacity: 1; }
+	        100% { transform: scale(0.8); opacity: 0.5; }
+	    }
+	</style>
+	
+	<script is:inline>
+	    // A. 只要点击了链接，还没开始下载新页面，立刻显示动画
+	    document.addEventListener('astro:before-preparation', () => {
+	        const feedback = document.getElementById('click-feedback');
+	        if (feedback) {
+	            feedback.style.opacity = '1';
+	        }
+	    });
+	
+	    // B. 新页面内容准备好并替换完成，立刻关掉动画
+	    document.addEventListener('astro:page-load', () => {
+	        const feedback = document.getElementById('click-feedback');
+	        if (feedback) {
+	            feedback.style.opacity = '0';
+	        }
+	    });
+	    
+	    // C. 兜底方案：如果页面切换报错或取消，也要关掉，否则会卡死界面
+	    document.addEventListener('astro:after-preparation', () => {
+	        // 如果需要更精细的控制可以在这里加
+	    });
+	</script>
+
 	</body>
 </html>
