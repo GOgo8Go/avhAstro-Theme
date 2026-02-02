@@ -126,7 +126,16 @@ import { ClientRouter } from 'astro:transitions';
 
         // 增加显示动画
 		<div id="click-feedback" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:transparent; display:flex; align-items:center; justify-content:center; z-index:999999; opacity:0; pointer-events:none; transition:opacity 0.2s;">
-		    <div style="width:28px; height:28px; border:2px solid rgba(0,0,0,0.05); border-top-color:var(--vh-main-color, #409eff); border-radius:50%; animation: spin 0.7s linear infinite;"></div>
+		    <div style="
+		        width: 48px; 
+		        height: 48px; 
+		        border: 3px solid rgba(0,0,0,0.05); 
+		        border-top: 3px solid #8b5cf6; /* 换成了活力的翡翠绿，你也可以改成 #8b5cf6(紫) 或 #f59e0b(金) */
+		        border-right: 3px solid rgba(16, 185, 129, 0.2); /* 侧边淡淡的颜色，增加质感 */
+		        border-radius: 50%; 
+		        box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* 增加一点点悬浮感 */
+		        animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+		    "></div>
 		</div>
 		
 		<style is:global>
