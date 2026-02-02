@@ -89,7 +89,7 @@ import { ClientRouter } from 'astro:transitions';
 		<main class="main">
 			{HomeBanner.enable && <MainHeader />}
 			<section class="main-inner" style={`padding-top:${HomeBanner.enable ? "0.88rem" : "calc(66px + 0.68rem)"}`}>
-				<section class="main-inner-content">
+				<section class="main-inner-content" transition:animate="none" >
 					<slot />
 				</section>
 				<Aside />
