@@ -111,16 +111,16 @@ import { ClientRouter } from 'astro:transitions';
 		</main>
 		<Footer transition:persist />
 		<script>
-			import InitFn from "@/scripts/Init";
-			
-			// 监听 Astro 页面加载完成（包括首次加载和切换后）
-			document.addEventListener('astro:page-load', () => {
-				try {
-					InitFn();
-				} catch (e) {
-					console.error("初始化脚本报错，可能是因为残留了 Swup 逻辑:", e);
-				}
-			});
+		    import InitFn from "@/scripts/Init";
+		    
+		    document.addEventListener('astro:page-load', () => {
+		        // 使用 requestIdleCallback，确保不阻塞转场动画
+		        if ('requestIdleCallback' in window) {
+		            window.requestIdleCallback(() => InitFn());
+		        } else {
+		            setTimeout(InitFn, 200); // 兼容方案
+		        }
+		    });
 		</script>
 	</body>
 </html>
