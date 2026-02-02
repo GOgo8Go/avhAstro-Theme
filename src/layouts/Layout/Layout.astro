@@ -99,8 +99,15 @@ import { ClientRouter } from 'astro:transitions';
 		<Footer />
 		<script>
 			import InitFn from "@/scripts/Init";
-			// 全局初始化
-			InitFn();
+			
+			// 监听 Astro 页面加载完成（包括首次加载和切换后）
+			document.addEventListener('astro:page-load', () => {
+				try {
+					InitFn();
+				} catch (e) {
+					console.error("初始化脚本报错，可能是因为残留了 Swup 逻辑:", e);
+				}
+			});
 		</script>
 	</body>
 </html>
