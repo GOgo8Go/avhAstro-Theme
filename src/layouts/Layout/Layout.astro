@@ -24,133 +24,154 @@ import "@/styles/Reset.less";
 import "@/styles/Base.less";
 // Layout 样式
 import "./Layout.less";
-
 import { ClientRouter } from 'astro:transitions';
 ---
 
 <html lang="zh-CN">
-    <Head Title={title} Keywords={keywords} Description={description} PageCover={pagecover}>
-        {ad_Client && (asideAD_Slot || articleAD_Slot) && <script is:inline async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ad_Client}`} crossorigin="anonymous" />}
-        
-        <script is:inline src="/assets/js/vhCaiqi.js" defer></script>
+  <Head Title={title} Keywords={keywords} Description={description} PageCover={pagecover}>
+    {ad_Client && (asideAD_Slot || articleAD_Slot) && (
+      <script
+        is:inline
+        async
+        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ad_Client}`}
+        crossorigin="anonymous"
+      />
+    )}
 
-        <script is:inline>
-        document.addEventListener('error', function (e) {
-          const target = e.target;
-          if (target.tagName !== 'IMG' || target.dataset.errorHandled) return;
-          target.dataset.errorHandled = "true";
-        
-          // 只判断是否是卡片封面、banner 或 avatar 区域
-          const isSpecialArea = 
-            target.classList.contains('vh-article-banner') ||
-            target.closest('.vh-article-banner') ||
-            target.closest('.post-card') ||
-            target.closest('.avatar');
-        
-          // 只有这些区域才替换成随机图
-          if (isSpecialArea) {
-            const randomId = Math.floor(Math.random() * 10) + 1;
-            target.src = `/assets/images/random/default-${randomId}.webp`;
-            target.style.padding = '0';
-            target.style.objectFit = 'cover';
-        
-            // 豁免模糊（如果 Base.less 还有模糊规则）
-            target.classList.add('img-error');  // 或 'loaded'，根据你的豁免逻辑
-        
-            target.onerror = () => {
-              target.src = `/assets/images/random/default-1.webp`;
-              target.classList.add('img-error');
-              target.onerror = null;
-            };
-          }
-        }, true);
-        </script>
+    <script is:inline src="/assets/js/vhCaiqi.js" defer></script>
 
-        <Fragment
-            set:html={`<style>:root {${Object.entries(Theme)
-                .map(([key, value]) => `${key}:${value};`)
-                .join("")}--vh-main-header-height:${Home ? HomeBanner.HomeHeight : HomeBanner.PageHeight};--vh-home-banner:${HomeBanner.background}}</style>`}
-        />
+    <!-- 解决深色模式下页面切换闪烁的核心脚本 -->
+    <script is:inline>
+      // 提前在 astro:before-swap 阶段给新 document 设置 dark class
+      document.addEventListener('astro:before-swap', (event) => {
+        const newDoc = event.newDocument;
+        // 判断系统是否为深色模式（与 prefers-color-scheme 一致）
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) {
+          newDoc.documentElement.classList.add('dark');
+        } else {
+          newDoc.documentElement.classList.remove('dark');
+        }
+      });
 
-        <ClientRouter />
+      // 当前页面首次加载也做一次修正（防止硬刷新仍有闪）
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
 
-        <script is:inline>
-          document.addEventListener('touchstart', (e) => {
-            const a = e.target.closest('a');
-            if (a && a.href && a.host === window.location.host) {
-              // 动态创建一个 prefetch 链接
-              const link = document.createElement('link');
-              link.rel = 'prefetch';
-              link.href = a.href;
-              document.head.appendChild(link);
-            }
-          }, { passive: true });
-        </script>
-    </Head>
-    <body>
-        <MobileSidebar transition:persist />
-        <Header activeNav={activeNav} transition:persist />
-        <main class="main">
-            {HomeBanner.enable && <MainHeader />}
-            <section class="main-inner" style={`padding-top:${HomeBanner.enable ? "0.88rem" : "calc(66px + 0.68rem)"}`}>
-                <section class="main-inner-content" transition:animate="none" >
-                    <slot />
-                </section>
-                <Aside />
-            </section>
-            <BackTop transition:persist />
-        </main>
-        <Footer transition:persist />
-        <script>
-            import InitFn from "@/scripts/Init";
-            
-            document.addEventListener('astro:page-load', () => {
-                // 使用 requestIdleCallback，确保不阻塞转场动画
-                if ('requestIdleCallback' in window) {
-                    window.requestIdleCallback(() => InitFn());
-                } else {
-                    setTimeout(InitFn, 200); // 兼容方案
-                }
-            });
-        </script>
+    <script is:inline>
+      document.addEventListener('error', function (e) {
+        const target = e.target;
+        if (target.tagName !== 'IMG' || target.dataset.errorHandled) return;
+        target.dataset.errorHandled = "true";
 
-        <div id="click-feedback" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:Canvas; color-scheme: light dark; display:flex; align-items:center; justify-content:center; z-index:999999; opacity:0; pointer-events:none; transition:opacity 0.2s;">
-            <div style="
-                width: 48px; 
-                height: 48px; 
-                border: 3px solid rgba(139, 92, 246, 0.1); 
-                border-top: 3px solid #8b5cf6;
-                border-right: 3px solid rgba(139, 92, 246, 0.3);
-                border-radius: 50%; 
-                box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-                animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-            "></div>
-        </div>
-        
-        <style is:global>
-            html {
-                /* 告诉浏览器该页面支持亮色/深色切换，配合上面的 Canvas 使用 */
-                color-scheme: light dark;
-            }
-        
-            @keyframes spin {
-                from { transform: rotate(0deg); }
-                to { transform: rotate(360deg); }
-            }
-        </style>
-        
-        <script is:inline>
-            // 点击链接瞬间显示
-            document.addEventListener('astro:before-preparation', () => {
-                const feedback = document.getElementById('click-feedback');
-                if (feedback) feedback.style.opacity = '1';
-            });
-        
-            // 页面跳转完成瞬间隐藏
-            document.addEventListener('astro:page-load', () => {
-                const feedback = document.getElementById('click-feedback');
-                if (feedback) feedback.style.opacity = '0';
-            });
-        </script>
-    </body>
+        // 只判断是否是卡片封面、banner 或 avatar 区域
+        const isSpecialArea =
+          target.classList.contains('vh-article-banner') ||
+          target.closest('.vh-article-banner') ||
+          target.closest('.post-card') ||
+          target.closest('.avatar');
+
+        // 只有这些区域才替换成随机图
+        if (isSpecialArea) {
+          const randomId = Math.floor(Math.random() * 10) + 1;
+          target.src = `/assets/images/random/default-${randomId}.webp`;
+          target.style.padding = '0';
+          target.style.objectFit = 'cover';
+
+          // 豁免模糊（如果 Base.less 还有模糊规则）
+          target.classList.add('img-error'); // 或 'loaded'，根据你的豁免逻辑
+
+          target.onerror = () => {
+            target.src = `/assets/images/random/default-1.webp`;
+            target.classList.add('img-error');
+            target.onerror = null;
+          };
+        }
+      }, true);
+    </script>
+
+    <Fragment
+      set:html={`<style>:root {${Object.entries(Theme)
+        .map(([key, value]) => `${key}:${value};`)
+        .join("")}--vh-main-header-height:${Home ? HomeBanner.HomeHeight : HomeBanner.PageHeight};--vh-home-banner:${HomeBanner.background}}</style>`}
+    />
+    <ClientRouter />
+    <script is:inline>
+      document.addEventListener('touchstart', (e) => {
+        const a = e.target.closest('a');
+        if (a && a.href && a.host === window.location.host) {
+          // 动态创建一个 prefetch 链接
+          const link = document.createElement('link');
+          link.rel = 'prefetch';
+          link.href = a.href;
+          document.head.appendChild(link);
+        }
+      }, { passive: true });
+    </script>
+  </Head>
+
+  <body>
+    <MobileSidebar transition:persist />
+    <Header activeNav={activeNav} transition:persist />
+    <main class="main">
+      {HomeBanner.enable && <MainHeader />}
+      <section class="main-inner" style={`padding-top:${HomeBanner.enable ? "0.88rem" : "calc(66px + 0.68rem)"}`}>
+        <section class="main-inner-content" transition:animate="none" >
+          <slot />
+        </section>
+        <Aside />
+      </section>
+      <BackTop transition:persist />
+    </main>
+    <Footer transition:persist />
+
+    <script>
+      import InitFn from "@/scripts/Init";
+
+      document.addEventListener('astro:page-load', () => {
+        // 使用 requestIdleCallback，确保不阻塞转场动画
+        if ('requestIdleCallback' in window) {
+          window.requestIdleCallback(() => InitFn());
+        } else {
+          setTimeout(InitFn, 200); // 兼容方案
+        }
+      });
+    </script>
+
+    <div id="click-feedback" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:transparent; display:flex; align-items:center; justify-content:center; z-index:999999; opacity:0; pointer-events:none; transition:opacity 0.2s;">
+      <div style="
+        width: 48px;
+        height: 48px;
+        border: 3px solid rgba(0,0,0,0.05);
+        border-top: 3px solid #8b5cf6;
+        border-right: 3px solid rgba(139, 92, 246, 0.2);
+        border-radius: 50%;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      "></div>
+    </div>
+
+    <style is:global>
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+    </style>
+
+    <script is:inline>
+      // 点击链接瞬间显示
+      document.addEventListener('astro:before-preparation', () => {
+        const feedback = document.getElementById('click-feedback');
+        if (feedback) feedback.style.opacity = '1';
+      });
+
+      // 页面跳转完成瞬间隐藏
+      document.addEventListener('astro:page-load', () => {
+        const feedback = document.getElementById('click-feedback');
+        if (feedback) feedback.style.opacity = '0';
+      });
+    </script>
+  </body>
 </html>
