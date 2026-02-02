@@ -412,4 +412,53 @@ img[data-vh-lz-src] {
 }
 
 
- 
+
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    // Body 背景 - 必须改深
+    --vh-body-bg: #0f0f0f;           // 或 #111111 / #0a0a0a / #121212，根据你喜好
+
+    // 字体主色 - 假设原 --vh-font-color 是深色（如 #111），深色下改浅
+    --vh-font-color: #e5e5e5;        // 浅灰白，主文字
+
+    // 透明度衍生色自动适应（因为用 rgb(from ...)）
+    --vh-font-88: rgb(from var(--vh-font-color) r g b / 88%);
+    --vh-font-66: rgb(from var(--vh-font-color) r g b / 66%);
+    // ... 其他字体透明度会自动跟随 --vh-font-color
+
+    // 白色块/卡片背景 - 改暗灰
+    --vh-white-color: #1e1e1e;
+
+    // Box shadow - 深色下影子更柔和或暗
+    --vh-box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+
+    // 默认中性色
+    --vh-default: #4b5563;           // gray-600
+    --vh-default-hover: #4b556330;
+
+    // 主题色如果在亮色下是深色，深色模式下可反转或保持（看你设计）
+    // --vh-main-color: #a5b4fc;     // 例如 indigo-300 浅版
+  }
+
+  html > body {
+    background: var(--vh-body-bg) !important;
+
+    &::before {
+      // 网格背景改深色版，或直接去掉/调低 opacity
+      background: var(--vh-body-bg) url('/assets/images/bg-dark.png') !important;  // 如果你准备了深色网格图
+      // 或直接纯色 + 低 opacity
+      // background: var(--vh-body-bg);
+      opacity: 0.08;  // 调低，避免深色下太明显/花哨
+    }
+  }
+
+  // 滚动条在深色下更友好（可选）
+  * {
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
