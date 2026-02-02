@@ -243,28 +243,9 @@ img[data-vh-lz-src] {
 }
 
 // swup 动画效果
-html.swup-enabled,
-html.is-changing {
-	.vh-animation {
-		&.vh-animation-init {
-			transform: translateY(0);
-			opacity: 1;
-			animation: none;
-		}
-	}
-}
+ 
 
-html.is-animating {
-	.vh-animation {
-		&.vh-animation-init {
-			/* 将位移从 0.88rem 改为 0.2rem，或者干脆删掉这一行 */
-            // transform: translateY(0.2rem); 
-            opacity: 0;
-            /* 强制缩短切换时的过渡时间 */
-            transition: opacity 0.1s ease-out, transform 0.1s ease-out;
-		}
-	}
-}
+ 
 
 // 占位加载
 .vh-space-loading {
