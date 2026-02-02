@@ -21,7 +21,10 @@ import SITE_INFO from './src/config';
 // https://astro.build/config
 export default defineConfig({
     site: SITE_INFO.Site,
-    build: { assets: 'vh_static' },
+    build: { 
+        assets: 'vh_static',
+        format: 'file' // <--- 加上这一行，这是作者没写但你现在必须需要的
+    },
     
     // 新增：开启 Astro 原生预取，这能解决你说的“等待感”
     prefetch: {
