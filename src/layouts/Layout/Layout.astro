@@ -80,7 +80,7 @@ import { ClientRouter } from 'astro:transitions';
 				.join("")}--vh-main-header-height:${Home ? HomeBanner.HomeHeight : HomeBanner.PageHeight};--vh-home-banner:${HomeBanner.background}}</style>`}
 		/>
 
-	<ClientRouter />
+	<ClientRouter fallback="swap" />
 
 	<script is:inline>
 	  document.addEventListener('touchstart', (e) => {
