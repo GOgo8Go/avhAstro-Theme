@@ -26,7 +26,7 @@ import "@/styles/Base.less";
 import "./Layout.less";
 // Layout.astro
  
-
+import { ClientRouter } from 'astro:transitions';
 ---
 
 <html lang="zh-CN">
@@ -79,7 +79,9 @@ import "./Layout.less";
 				.map(([key, value]) => `${key}:${value};`)
 				.join("")}--vh-main-header-height:${Home ? HomeBanner.HomeHeight : HomeBanner.PageHeight};--vh-home-banner:${HomeBanner.background}}</style>`}
 		/>
- 
+
+	<ClientRouter />
+
 	</Head>
 	<body>
 		<MobileSidebar />
