@@ -47,7 +47,7 @@ import { ClientRouter } from 'astro:transitions';
             target.closest('.post-card') ||
             target.closest('.avatar');
         
-          // 只有这些区域才替换成随机图
+          // 只有 these 区域才替换成随机图
           if (isSpecialArea) {
             const randomId = Math.floor(Math.random() * 10) + 1;
             target.src = `/assets/images/random/default-${randomId}.webp`;
@@ -122,16 +122,21 @@ import { ClientRouter } from 'astro:transitions';
             <div style="
                 width: 48px; 
                 height: 48px; 
-                border: 3px solid rgba(0,0,0,0.05); 
+                border: 3px solid rgba(255,255,255,0.1); 
                 border-top: 3px solid #8b5cf6; /* 换成了活力的翡翠绿，你也可以改成 #8b5cf6(紫) 或 #f59e0b(金) */
                 border-right: 3px solid rgba(139, 92, 246, 0.2); /* 侧边淡淡的颜色，增加质感 */
                 border-radius: 50%; 
-                box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* 增加一点点悬浮感 */
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2); /* 增加一点点悬浮感 */
                 animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
             "></div>
         </div>
         
         <style is:global>
+            /* 修复深色模式白闪：强制锁定 html 标签的底色 */
+            html {
+                background-color: #1a1a1a !important; /* 请根据你 Base.less 真实的深色背景色微调此值 */
+            }
+
             @keyframes spin {
                 from { transform: rotate(0deg); }
                 to { transform: rotate(360deg); }
