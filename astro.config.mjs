@@ -23,7 +23,8 @@ export default defineConfig({
 		theme: false,
 		// animationClass: "vh-animation-",
 		animationClass: false, // 临时关掉动画类，看看是不是动画逻辑导致的空白
-		containers: [".main-inner>.main-inner-content", '.vh-header>.main'],
+		//containers: [".main-inner>.main-inner-content", '.vh-header>.main'],
+		containers: [".main-inner-content"], // 暂时删掉 header 的更新
 		smoothScrolling: false, // 显式禁用，不让 JS 模拟滚动
 		animateHistoryBrowsing: true,    // 让前进后退也带动画
         progress: true,  
