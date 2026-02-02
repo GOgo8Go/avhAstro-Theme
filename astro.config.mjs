@@ -21,7 +21,8 @@ export default defineConfig({
 	build: { assets: 'vh_static' },
 	integrations: [swup({
 		theme: false,
-		animationClass: "vh-animation-",
+		// animationClass: "vh-animation-",
+		animationClass: false, // 临时关掉动画类，看看是不是动画逻辑导致的空白
 		containers: [".main-inner>.main-inner-content", '.vh-header>.main'],
 		smoothScrolling: false, // 显式禁用，不让 JS 模拟滚动
 		animateHistoryBrowsing: true,    // 让前进后退也带动画
