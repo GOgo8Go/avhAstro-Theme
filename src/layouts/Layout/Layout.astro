@@ -82,6 +82,19 @@ import { ClientRouter } from 'astro:transitions';
 
 	<ClientRouter />
 
+	<script is:inline>
+	  document.addEventListener('touchstart', (e) => {
+	    const a = e.target.closest('a');
+	    if (a && a.href && a.host === window.location.host) {
+	      // 动态创建一个 prefetch 链接
+	      const link = document.createElement('link');
+	      link.rel = 'prefetch';
+	      link.href = a.href;
+	      document.head.appendChild(link);
+	    }
+	  }, { passive: true });
+	</script>
+
 	</Head>
 	<body>
 		<MobileSidebar transition:persist />
