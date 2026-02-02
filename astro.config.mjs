@@ -27,7 +27,7 @@ export default defineConfig({
 		smoothScrolling: false, // 显式禁用，不让 JS 模拟滚动
 		animateHistoryBrowsing: true,    // 让前进后退也带动画
         progress: true,  
-		cache: true,
+		cache: false,
 
 		preload: {
 	      hover: true,           // 保留 hover 预载（大多数人想要的）
