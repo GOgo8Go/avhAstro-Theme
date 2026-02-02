@@ -114,7 +114,7 @@ import { ClientRouter } from 'astro:transitions';
             });
         </script>
 
-        <div id="click-feedback" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:transparent; display:flex; align-items:center; justify-content:center; z-index:999999; opacity:0; pointer-events:none; transition:opacity 0.2s;">
+        <div id="click-feedback" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:Canvas; color-scheme: light dark; display:flex; align-items:center; justify-content:center; z-index:999999; opacity:0; pointer-events:none; transition:opacity 0.2s;">
             <div style="
                 width: 48px; 
                 height: 48px; 
@@ -128,11 +128,11 @@ import { ClientRouter } from 'astro:transitions';
         </div>
         
         <style is:global>
-            /* 关键点：这一行让浏览器强制深色渲染时，默认底层就是深色，消除白闪 */
             html {
+                /* 告诉浏览器该页面支持亮色/深色切换，配合上面的 Canvas 使用 */
                 color-scheme: light dark;
             }
-
+        
             @keyframes spin {
                 from { transform: rotate(0deg); }
                 to { transform: rotate(360deg); }
