@@ -63,10 +63,6 @@ import { ClientRouter } from 'astro:transitions';
               target.onerror = null;
             };
           }
-        
-          // 文章里的图片或其他地方：什么都不做，让浏览器/lazyload 默认处理
-          // （可能显示破碎图标、问号，或保持模糊，根据你的库设置）
-        
         }, true);
         </script>
 
@@ -122,16 +118,21 @@ import { ClientRouter } from 'astro:transitions';
             <div style="
                 width: 48px; 
                 height: 48px; 
-                border: 3px solid rgba(0,0,0,0.05); 
-                border-top: 3px solid #8b5cf6; /* 换成了活力的翡翠绿，你也可以改成 #8b5cf6(紫) 或 #f59e0b(金) */
-                border-right: 3px solid rgba(139, 92, 246, 0.2); /* 侧边淡淡的颜色，增加质感 */
+                border: 3px solid rgba(139, 92, 246, 0.1); 
+                border-top: 3px solid #8b5cf6;
+                border-right: 3px solid rgba(139, 92, 246, 0.3);
                 border-radius: 50%; 
-                box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* 增加一点点悬浮感 */
+                box-shadow: 0 4px 15px rgba(0,0,0,0.05);
                 animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
             "></div>
         </div>
         
         <style is:global>
+            /* 关键点：这一行让浏览器强制深色渲染时，默认底层就是深色，消除白闪 */
+            html {
+                color-scheme: light dark;
+            }
+
             @keyframes spin {
                 from { transform: rotate(0deg); }
                 to { transform: rotate(360deg); }
