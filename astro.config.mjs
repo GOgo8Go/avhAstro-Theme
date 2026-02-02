@@ -28,8 +28,8 @@ export default defineConfig({
     
     // 新增：开启 Astro 原生预取，这能解决你说的“等待感”
     prefetch: {
-        prefetchAll: false, // 关闭全量预取
-        defaultStrategy: 'hover', // 仅当手指摸到链接时才预取
+        prefetchAll: true, // 开启全量预取
+        defaultStrategy: 'viewport', // 只要出现在屏幕上就下
     },
 
     integrations: [
