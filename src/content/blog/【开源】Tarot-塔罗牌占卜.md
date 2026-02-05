@@ -17,7 +17,7 @@ date: 2024-12-06 09:37:11
 
 ### 页面截图
 
-![【开源】Tarot-塔罗牌占卜Tarot-Web](https://i0.wp.com/uxiaohan.github.io/v2/2024/12/1733449968.webp)
+![【开源】Tarot-塔罗牌占卜Tarot-Web](https: )
 
 ::btn[点击体验]{link="https://tarot.4ce.cn/"}
 
