@@ -1,0 +1,90 @@
+---
+
+title: "注册MongoDB数据库托管服务 - 实战给Astro添加评论系统"
+
+categories: 资源分享
+
+tags: ["MongoDB", "数据库", "Vercel", "免费"]
+
+id: "register-mongodb-database"
+
+date: 2026-2-6
+
+cover: "https://fastly.jsdelivr.net/gh/DadaMr/pics5o/0p/Mongodb-fengmian.avif"
+
+---
+
+
+
+:::note{type="info"}
+
+🎉 本文将介绍如何注册 MongoDB 数据库，目前最主流且能“白嫖”的方案是 Vercel + MongoDB Atlas，注册完成你就拥有一个免费的 MongoDB 数据库。
+
+:::
+
+
+
+很多应用都需要用到数据库，比如本次博主需要给该 `Astro` 主题的网站接入 `Twikoo` 评论系统，所以就实战演示一下怎么注册免费的 `MongoDB` 数据库吧，并把 MongoDB 部署到 `Vercel` 上实现评论线上管理。
+
+注册和部署分为两部分：**存数据的（MongoDB）** 和 **跑程序的（Vercel）**。
+
+## 第一步：注册 MongoDB Atlas (存储评论内容)
+这是咱的数据库，评论都存在这。
+1. 访问 [MongoDB Atlas 官网](https://www.mongodb.com/cloud/atlas/register)。
+2. 可以用谷歌邮箱登录，注册成功后，创建一个 **Shared Cluster**（选那个 **FREE** 免费版）。
+<img src="https://fastly.jsdelivr.net/gh/DadaMr/pics5o/0p/Mongodb%20(1).avif" height=350px />
+
+3. **关键设置**：
+> - **Cloud Provider**: 选 AWS 或 Google Cloud。
+> - **Region**: 选距离你读者最近的（比如新加坡 `ap-southeast-1` 或 香港）。
+
+4. **安全配置**（非常重要）：
+
+**Database User**: 设置一个用户名和密码（**记下来**，后面要用）。
+<img src="https://fastly.jsdelivr.net/gh/DadaMr/pics5o/0p/Mongodb%20(2).avif"/>
+* **IP Access List**: 点击 "Add IP Address"，选 **"Allow Access From Anywhere"** (0.0.0.0/0)，否则 Vercel 连不上。
+<img src="https://fastly.jsdelivr.net/gh/DadaMr/pics5o/0p/Mongodb%20(3).avif"/>
+<img src="https://fastly.jsdelivr.net/gh/DadaMr/pics5o/0p/Mongodb%20(4).avif"/>
+5. **获取连接字符串**：
+* 点击 "Connect" -> "Connect your application"。
+<img src="https://fastly.jsdelivr.net/gh/DadaMr/pics5o/0p/Mongodb%20(5).avif"/>
+* 复制那段 `mongodb+srv://...` 的链接
+<img src="https://fastly.jsdelivr.net/gh/DadaMr/pics5o/0p/Mongodb%20(6).avif"/>
+
+## 第二步：部署 Twikoo 到 Vercel (运行程序)
+这是你的后端，负责处理评论逻辑。
+1. 打开 [Twikoo Vercel 一键部署链接](https://vercel.com/import/project?template=https://github.com/twikoojs/twikoo/tree/main/src/server/vercel-min)。
+2. 根据提示登录你的 GitHub 账号。
+3. **配置环境变量 (Environment Variables)**：
+>  * 添加一个变量，名字叫 `MONGODB_URI`。
+>  * 值就是你刚才在 MongoDB 拿到并替换好密码的那个 **连接字符串**。
+4. 点击 **Deploy**。等待 1 分钟左右，部署完成后，Vercel 会给你一个二级域名（例如 `xxx.vercel.app`）。
+
+更具体的部署步骤可以参考 Twikoo 的云部署文档 https://twikoo.js.org/backend.html
+<img src="https://fastly.jsdelivr.net/gh/DadaMr/pics5o/0p/Twikoo-file.avif"/>
+
+## 第三步：获取 envId 并测试
+1.你在 Vercel 得到的那个 **域名** (`https://xxx.vercel.app`) 就是你的 **`envId`**。
+
+2.回到你的 `config.ts`，填入这个地址：
+```
+ Comment: {
+  Twikoo: {
+    enable: true,
+    envId: 'https://你的域名.vercel.app' 
+  }
+}
+```
+3.运行你的 Astro 项目，进入详情页。
+
+4.**初始化管理后台**：
+> - 你应该能看到评论框加载出来了。
+> - 点击评论框右下角的**设置图标（小齿轮）**。
+> - 设置你的 **管理员密码**。
+
+
+
+### 常见小坑：
+> 1. **MongoDB 连接失败**：90% 的情况是 IP 白名单没设为 `0.0.0.0/0` 或者密码里有特殊字符（建议只用字母和数字）。
+> 2. **跨域问题**：Twikoo 默认允许所有域名，但如果你要在 Vercel 设置里配置 `ALLOWED_DOMAINS`，记得把你的博客域名加进去。
+> 3. **访问速度** Vercel 部署，适用于想要免费部署的用户，在中国大陆访问速度较慢甚至无法访问，绑定自己的域名可以提高访问速度。
