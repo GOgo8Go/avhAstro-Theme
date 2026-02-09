@@ -2,8 +2,8 @@ backend:
   name: github
   repo: GOgo8Go/avhAstro-Theme          # 例如 Lu/my-astro-blog
   branch: main
-  base_url: https://cms-astro-tryoneka.edtgbfd.workers.dev  # ← 后面部署成功后改成真实域名
-  auth_endpoint: auth
+  base_url: https://avhastro-theme.pages.dev  # ← 后面部署成功后改成真实域名
+   
 
 media_folder: "public/uploads"
 public_folder: "/uploads"
