@@ -2,10 +2,34 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Content Manager</title>
 </head>
 <body>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script>
+    // 直接初始化，彻底跳过对 config.yml 的读取
+    window.CMS_CONFIG = {
+      backend: {
+        name: "github",
+        repo: "GOgo8Go/avhAstro-Theme", // 记得改这里
+        branch: "main",
+        base_url: "https://cms-astro-tryoneka.edtgbfd.workers.dev", // 记得改这里
+        auth_endpoint: "auth"
+      },
+      media_folder: "public/images",
+      collections: [
+        {
+          name: "posts",
+          label: "Posts",
+          folder: "src/content/blog", // 确保这是你 Astro 存放 MD 文件的路径
+          create: true,
+          fields: [
+            {label: "Title", name: "title", widget: "string"},
+            {label: "Body", name: "body", widget: "markdown"}
+          ]
+        }
+      ]
+    };
+  </script>
 </body>
 </html>
