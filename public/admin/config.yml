@@ -1,58 +1,28 @@
-<!doctype html>
-<html lang="zh-CN">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>内容管理后台</title>
-</head>
-<body>
-  <div id="nc-root"></div>
+backend:
+  name: github
+  repo: GOgo8Go/avhAstro-Theme          # 替换成你的真实用户名/仓库名
+  branch: main
+  site_domain: https://avhastro-theme.pages.dev
+  base_url: https://avhastro-theme.pages.dev
+  auth_endpoint: /api/auth
 
-  <!-- 使用最新稳定版 -->
-  <script src="https://cdn.jsdelivr.net/npm/decap-cms@3.3.3/dist/decap-cms.js"></script>
+media_folder: "public/uploads"
+public_folder: "/uploads"
 
-  <script>
-    // 关键：阻止 Netlify Identity 初始化
-    window.netlifyIdentity = null;
-
-    // 强制手动初始化
-    window.CMS_MANUAL_INIT = true;
-
-    // 显式注册 GitHub backend
-    CMS.registerBackend('github', window.CMS_GITHUB_BACKEND);
-
-    CMS.init({
-      config: {
-        backend: {
-          name: 'github',
-          repo: 'GOgo8Go/avhAstro-Theme',   // 替换成真实的，例如 Lu/my-astro-blog
-          branch: 'main'
-        },
-        media_folder: 'public/uploads',
-        public_folder: '/uploads',
-        collections: [
-          {
-            name: 'blog',
-            label: '博客文章',
-            folder: 'src/content/blog',
-            create: true,
-            slug: '{{fields.filename}}',
-            fields: [
-              {label: '文件名（不带.md）', name: 'filename', widget: 'string', required: true},
-              {label: '标题', name: 'title', widget: 'string', required: true},
-              {label: '分类', name: 'categories', widget: 'string', required: true},
-              {label: '标签（逗号隔开）', name: 'tags', widget: 'string', default: ''},
-              {label: 'ID（用于URL）', name: 'id', widget: 'string', required: true},
-              {label: '日期', name: 'date', widget: 'date', required: true, format: 'YYYY-MM-DD'},
-              {label: '封面 URL', name: 'cover', widget: 'string', default: ''},
-              {label: '推荐', name: 'recommend', widget: 'boolean', default: false},
-              {label: '置顶', name: 'top', widget: 'boolean', default: false},
-              {label: '正文', name: 'body', widget: 'markdown', required: true}
-            ]
-          }
-        ]
-      }
-    });
-  </script>
-</body>
-</html>
+collections:
+  - name: "blog"
+    label: "博客文章"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{fields.filename}}"
+    fields:
+      - {label: "文件名（不带.md）", name: "filename", widget: "string", required: true}
+      - {label: "标题", name: "title", widget: "string", required: true}
+      - {label: "分类", name: "categories", widget: "string", required: true}
+      - {label: "标签（逗号隔开）", name: "tags", widget: "string", default: ""}
+      - {label: "ID（用于URL）", name: "id", widget: "string", required: true}
+      - {label: "日期", name: "date", widget: "date", required: true, format: "YYYY-MM-DD"}
+      - {label: "封面 URL", name: "cover", widget: "string", default: ""}
+      - {label: "推荐", name: "recommend", widget: "boolean", default: false}
+      - {label: "置顶", name: "top", widget: "boolean", default: false}
+      - {label: "正文", name: "body", widget: "markdown", required: true}
