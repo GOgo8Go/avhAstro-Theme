@@ -14,7 +14,7 @@ collections:
     label: "博客文章"
     folder: "src/content/blog"
     create: true
-    slug: "{{fields.filename}}"          # 文件名仍由这个字段决定
+    slug: "{{fields.filename}}"
     fields:
       - {label: "文件名（不带.md）", name: "filename", widget: "string", required: true}
       - {label: "标题", name: "title", widget: "string", required: true}
@@ -22,7 +22,10 @@ collections:
       - label: "标签"
         name: "tags"
         widget: "list"
-        field: {widget: "string", label: "标签"}
+        field:
+          name: "tag"           # ← 关键修复
+          widget: "string"
+          label: "单个标签"
         default: []
       - {label: "ID（用于URL）", name: "id", widget: "string", required: true}
       - {label: "日期", name: "date", widget: "datetime", required: true, date_format: "YYYY-MM-DD", time_format: false}
