@@ -4,6 +4,84 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Content Manager</title>
+    <style>
+  :root {
+    --primary: #6366f1;         /* 主要按钮色（靛蓝） */
+    --primary-hover: #4f46e5;
+    --bg: #111827;              /* 深灰背景 */
+    --card-bg: #1f2937;
+    --text: #f3f4f6;
+    --text-secondary: #9ca3af;
+    --border: #374151;
+  }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  /* 侧边栏 */
+  .cms-sidebar {
+    background: var(--bg) !important;
+    border-right: 1px solid var(--border) !important;
+  }
+
+  .cms-menu-label, .cms-menu-item {
+    color: var(--text) !important;
+  }
+
+  .cms-menu-item:hover, .cms-menu-item.is-active {
+    background: #1e293b !important;
+    color: white !important;
+  }
+
+  /* 卡片和编辑区域 */
+  .cms-card, .cms-collection-list-card {
+    background: var(--card-bg) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4) !important;
+  }
+
+  /* 按钮 */
+  .cms-button {
+    background: var(--primary) !important;
+    border: none !important;
+    border-radius: 8px !important;
+    transition: all 0.2s;
+  }
+
+  .cms-button:hover {
+    background: var(--primary-hover) !important;
+    transform: translateY(-1px);
+  }
+
+  /* 输入框和标签 */
+  input, textarea, .cms-text-input {
+    background: #1e293b !important;
+    border: 1px solid var(--border) !important;
+    color: var(--text) !important;
+    border-radius: 6px !important;
+  }
+
+  /* 顶部栏 */
+  .cms-topbar {
+    background: #0f172a !important;
+    border-bottom: 1px solid var(--border) !important;
+  }
+
+  /* Markdown 编辑器 */
+  .cm-editor, .cm-content {
+    background: #0f172a !important;
+    color: #e5e7eb !important;
+  }
+
+  .cm-gutters {
+    background: #111827 !important;
+    border-right: 1px solid var(--border) !important;
+  }
+</style>
   </head>
   <body>
     <!-- Include the script that builds the page and powers Netlify CMS -->
