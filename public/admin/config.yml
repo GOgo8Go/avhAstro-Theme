@@ -10,7 +10,7 @@ media_folder: "public/uploads"
 public_folder: "/uploads"
 
 collections:
-  - name: "blog"  # 只能有一个 "blog"
+  - name: "blog"  # 只能有一个 "blog" 
     label: "博客文章"
     folder: "src/content/blog"
     create: true
