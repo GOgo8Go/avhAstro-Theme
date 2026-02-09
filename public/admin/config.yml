@@ -1,0 +1,27 @@
+backend:
+  name: git-gateway  # 使用 Netlify Git Gateway（最简单）
+  branch: main       # 你的主分支
+
+# 如果你不想用 Git Gateway，也可以用 github backend（见下面备选）
+
+media_folder: "public/uploads"   # 图片上传存放路径
+public_folder: "/uploads"
+
+collections:
+  - name: "blog"
+    label: "博客文章"
+    folder: "src/content/blog"   # 你的 Astro 内容目录
+    create: true                 # 允许新建
+    delete: true                 # 允许删除
+    slug: "{{fields.filename}}"  # 文件名用 filename 字段决定（不带 .md）
+    fields:
+      - {label: "文件名（不带.md）", name: "filename", widget: "string", required: true}
+      - {label: "标题", name: "title", widget: "string", required: true}
+      - {label: "分类", name: "categories", widget: "string", required: true}
+      - {label: "标签（逗号隔开）", name: "tags", widget: "string"}
+      - {label: "ID（用于URL）", name: "id", widget: "string", required: true}
+      - {label: "日期", name: "date", widget: "date", required: true, format: "YYYY-MM-DD"}
+      - {label: "封面 URL", name: "cover", widget: "string"}
+      - {label: "推荐", name: "recommend", widget: "boolean", default: false}
+      - {label: "置顶", name: "top", widget: "boolean", default: false}
+      - {label: "正文", name: "body", widget: "markdown", required: true}
