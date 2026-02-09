@@ -1,7 +1,10 @@
 backend:
   name: github
-  repo: GOgo8Go/avhAstro-Theme  # 改成你的真实
-  branch: main
+  repo: GOgo8Go/avhAstro-Theme
+  branch: main # Branch to update (optional; defaults to master)
+  site_domain: https://avhastro-theme.pages.dev
+  base_url: https://avhastro-theme.pages.dev
+  auth_endpoint: /api/auth
 
 media_folder: "public/uploads"
 public_folder: "/uploads"
