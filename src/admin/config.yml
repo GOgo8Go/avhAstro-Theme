@@ -2,7 +2,7 @@ backend:
   name: github
   repo: 你的用户名/你的仓库名          # 例如 Lu/my-astro-blog
   branch: main
-  base_url: https://cms-your-site.vercel.app   # ← 后面部署成功后改成真实域名
+  base_url: https://cms-avh-astro-theme.vercel.app/   # ← 后面部署成功后改成真实域名
   squash_merges: true
 
 media_folder: "public/uploads"
