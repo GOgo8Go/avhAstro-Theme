@@ -1,0 +1,28 @@
+backend:
+  name: github
+  repo: 你的用户名/你的仓库名          # 例如 Lu/my-astro-blog
+  branch: main
+  base_url: https://cms-your-site.vercel.app   # ← 后面部署成功后改成真实域名
+  squash_merges: true
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: "blog"
+    label: "博客文章"
+    folder: "src/content/blog"
+    create: true
+    delete: true
+    slug: "{{fields.filename}}"
+    fields:
+      - {label: "文件名（不带.md）", name: "filename", widget: "string", required: true}
+      - {label: "标题", name: "title", widget: "string", required: true}
+      - {label: "分类", name: "categories", widget: "string", required: true}
+      - {label: "标签（逗号隔开）", name: "tags", widget: "string", default: ""}
+      - {label: "ID（用于URL）", name: "id", widget: "string", required: true}
+      - {label: "日期", name: "date", widget: "date", required: true, format: "YYYY-MM-DD"}
+      - {label: "封面 URL", name: "cover", widget: "string", default: ""}
+      - {label: "推荐", name: "recommend", widget: "boolean", default: false}
+      - {label: "置顶", name: "top", widget: "boolean", default: false}
+      - {label: "正文", name: "body", widget: "markdown", required: true}
