@@ -14,26 +14,19 @@ collections:
     label: "博客文章"
     folder: "src/content/blog"
     create: true
+    # 使用 filename 字段作为生成的文件名
     slug: "{{fields.filename}}"
     fields:
-      - {label: "文件名（不带.md）", name: "filename", widget: "string", required: true}  # 后台显示，但不写入 md
+      - {label: "文件名（不带.md）", name: "filename", widget: "string", required: true}
       - {label: "标题", name: "title", widget: "string", required: true}
       - {label: "分类", name: "categories", widget: "string", required: true}
       - label: "标签"
         name: "tags"
         widget: "list"
-        field:
-          name: "tag"
-          widget: "string"
-          label: "单个标签"
+        field: {label: "单个标签", name: "tag", widget: "string"}
         default: []
       - {label: "ID（用于URL）", name: "id", widget: "string", required: true}
       - {label: "日期", name: "date", widget: "datetime", required: true, date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD"}
-      - {label: "封面 URL", name: "cover", widget: "string", default: ""}
-      - {label: "推荐", name: "recommend", widget: "boolean", default: false}
-      - {label: "置顶", name: "top", widget: "boolean", default: false}
-      - {label: "正文", name: "body", widget: "markdown", required: true}
-      - {label: "日期", name: "date", widget: "datetime", required: true, date_format: "YYYY-MM-DD", time_format: false}
       - {label: "封面 URL", name: "cover", widget: "string", default: ""}
       - {label: "推荐", name: "recommend", widget: "boolean", default: false}
       - {label: "置顶", name: "top", widget: "boolean", default: false}
