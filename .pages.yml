@@ -1,1 +1,55 @@
-qqq
+# .pages.yml 示例 - 放在 repo 根目录
+media:
+  input: public/uploads   # 你的图片上传路径，根据 Astro 调整
+  output: uploads         # commit 后的路径
+
+content:
+  - name: blog
+    label: 我的博客文章
+    type: collection
+    path: src/content/blog   # 你的 MD 文件夹路径（注意 Astro content collections 通常在这里）
+    format: yaml-frontmatter  # 或 frontmatter，根据你的 MD 文件
+    filename: "{{id}}.md"     # 文件名基于你的 id 字段（或 "{{title | slugify}}.md"）
+    fields:
+      - name: filename
+        label: 文件名（不带 .md）
+        widget: string
+        required: true
+      - name: title
+        label: 标题
+        widget: string
+        required: true
+      - name: categories
+        label: 分类
+        widget: string
+        required: true
+      - name: tags
+        label: 标签（逗号隔开）
+        widget: string
+        hint: 用逗号隔开，例如：前端, Astro
+      - name: id
+        label: ID（用于访问地址）
+        widget: string
+        required: true
+      - name: date
+        label: 日期
+        widget: date
+        required: true
+      - name: cover
+        label: 封面图片 URL
+        widget: string
+      - name: recommend
+        label: 推荐
+        widget: boolean
+        default: false
+      - name: top
+        label: 置顶
+        widget: boolean
+        default: false
+      - name: content
+        label: 正文
+        widget: markdown
+        required: true
+    view:
+      fields: [title, date, categories]  # 列表页显示的列
+      sort: date desc                    # 按日期降序
